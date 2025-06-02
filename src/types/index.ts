@@ -45,7 +45,10 @@ export type Player = z.infer<typeof PlayerSchema>;
 export const TeamSchema = z.object({
   id: z.string(),
   name: z.string().min(1, "Team name is required"),
-  logoUrl: z.string().url().optional(),
+  logoUrl: z.preprocess(
+    (val) => (val === "" || val === null ? undefined : val),
+    z.string().url("Invalid URL format for Team Logo URL").optional()
+  ),
   roster: z.array(PlayerSchema),
   description: z.string().optional(),
 });
@@ -66,4 +69,3 @@ export const TournamentLeaderboardSchema = z.object({
   entries: z.array(LeaderboardEntrySchema),
 });
 export type TournamentLeaderboard = z.infer<typeof TournamentLeaderboardSchema>;
-
