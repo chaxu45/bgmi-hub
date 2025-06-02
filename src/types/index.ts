@@ -6,7 +6,7 @@ export const NewsArticleSchema = z.object({
   title: z.string().min(1, "Title is required"),
   summary: z.string().min(1, "Summary is required"),
   imageUrls: z.array(
-    z.string().url("Each image URL must be a valid URL.")
+    z.string().url("Each image URL must be a valid URL.").min(1, "URL cannot be empty if field is added.")
   ).optional().default([]),
   source: z.string().min(1, "Source is required"),
   publishedDate: z.string().refine((date) => !isNaN(Date.parse(date)), "Invalid date format"),
@@ -26,7 +26,7 @@ export const TournamentSchema = z.object({
   format: z.string().optional(),
   pointSystem: z.string().optional(),
   imageUrls: z.array(
-    z.string().url("Each image URL must be a valid URL.")
+    z.string().url("Each image URL must be a valid URL.").min(1, "URL cannot be empty if field is added.")
   ).optional().default([]),
   status: z.enum(['Ongoing', 'Upcoming', 'Completed']),
 });
@@ -55,9 +55,8 @@ export type Team = z.infer<typeof TeamSchema>;
 export const TournamentLeaderboardSchema = z.object({
   tournamentId: z.string().min(1, "Tournament ID is required"),
   tournamentName: z.string().min(1, "Tournament name is required"),
-  leaderboardImageUrl: z.preprocess(
-    (val) => (val === "" || val === null ? undefined : val),
-    z.string().url("Invalid URL for leaderboard image.").optional()
-  ),
+  leaderboardImageUrls: z.array(
+    z.string().url("Each leaderboard image URL must be a valid URL (data URIs are valid).")
+  ).optional().default([]),
 });
 export type TournamentLeaderboard = z.infer<typeof TournamentLeaderboardSchema>;

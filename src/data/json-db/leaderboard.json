@@ -2,5 +2,5 @@
 {
   "tournamentId": "default-leaderboard",
   "tournamentName": "Current Tournament Leaderboard",
-  "leaderboardImageUrl": "https://placehold.co/800x1200.png"
+  "leaderboardImageUrls": ["https://placehold.co/800x1200.png"]
 }

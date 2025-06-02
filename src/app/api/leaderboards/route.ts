@@ -11,7 +11,21 @@ const leaderboardFilePath = path.join(process.cwd(), 'src', 'data', 'json-db', '
 async function readLeaderboard(): Promise<TournamentLeaderboard | null> {
   try {
     const jsonData = await fs.promises.readFile(leaderboardFilePath, 'utf-8');
-    return JSON.parse(jsonData) as TournamentLeaderboard;
+    let parsedData = JSON.parse(jsonData) as any; // Read as any for migration
+
+    // Migration: if old single imageUrl exists, convert to imageUrls array
+    if (parsedData.leaderboardImageUrl && !parsedData.leaderboardImageUrls) {
+      parsedData.leaderboardImageUrls = [parsedData.leaderboardImageUrl];
+      delete parsedData.leaderboardImageUrl; // Remove old field
+      // Optionally, write back migrated data immediately, or let next PUT do it
+      // await writeLeaderboard(parsedData as TournamentLeaderboard); 
+    }
+    // Ensure leaderboardImageUrls is an array if it's undefined
+    if (parsedData.leaderboardImageUrls === undefined) {
+        parsedData.leaderboardImageUrls = [];
+    }
+
+    return parsedData as TournamentLeaderboard;
   } catch (error) {
     console.error('Error reading leaderboard file:', error);
     if ((error as NodeJS.ErrnoException).code === 'ENOENT') {
@@ -19,7 +33,7 @@ async function readLeaderboard(): Promise<TournamentLeaderboard | null> {
       const defaultLeaderboard: TournamentLeaderboard = {
         tournamentId: `default-tournament-${Date.now()}`,
         tournamentName: 'New Tournament Leaderboard',
-        leaderboardImageUrl: undefined,
+        leaderboardImageUrls: [],
       };
       await writeLeaderboard(defaultLeaderboard);
       return defaultLeaderboard;
@@ -31,7 +45,6 @@ async function readLeaderboard(): Promise<TournamentLeaderboard | null> {
 async function writeLeaderboard(data: TournamentLeaderboard): Promise<void> {
   try {
     const jsonData = JSON.stringify(data, null, 2);
-    // Ensure the directory exists
     const dir = path.dirname(leaderboardFilePath);
     if (!fs.existsSync(dir)) {
         await fs.promises.mkdir(dir, { recursive: true });
@@ -47,11 +60,10 @@ export async function GET() {
   try {
     let leaderboard = await readLeaderboard();
     if (!leaderboard) {
-       // This case should ideally be handled by readLeaderboard creating a default
        return NextResponse.json({ 
          tournamentId: `default-fallback-${Date.now()}`, 
          tournamentName: 'Leaderboard (Not Initialized)', 
-         leaderboardImageUrl: undefined 
+         leaderboardImageUrls: [] 
        }, { status: 200 });
     }
     return NextResponse.json(leaderboard);
@@ -64,10 +76,9 @@ export async function GET() {
 export async function PUT(request: NextRequest) {
   try {
     const requestBody = await request.json();
-    // Ensure leaderboardImageUrl is handled correctly if missing from payload
     const parsedBody = {
         ...requestBody,
-        leaderboardImageUrl: requestBody.leaderboardImageUrl || undefined,
+        leaderboardImageUrls: Array.isArray(requestBody.leaderboardImageUrls) ? requestBody.leaderboardImageUrls : [],
     };
     const validationResult = TournamentLeaderboardSchema.safeParse(parsedBody);
 
