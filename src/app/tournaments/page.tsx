@@ -17,8 +17,18 @@ async function getAllTournaments(): Promise<Tournament[]> {
   }
 }
 
+const statusOrder: Record<Tournament['status'], number> = {
+  Ongoing: 1,
+  Upcoming: 2,
+  Completed: 3,
+};
+
 export default async function TournamentsPage() {
-  const tournaments = await getAllTournaments();
+  let tournaments = await getAllTournaments();
+
+  tournaments.sort((a, b) => {
+    return statusOrder[a.status] - statusOrder[b.status];
+  });
 
   return (
     <div className="space-y-8">
