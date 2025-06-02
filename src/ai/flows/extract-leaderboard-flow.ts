@@ -10,9 +10,9 @@
 
 import { ai } from '@/ai/genkit';
 import { z } from 'zod';
-import { AiExtractedLeaderboardDataSchema, AiExtractedLeaderboardEntrySchema } from '@/types';
+import { AiExtractedLeaderboardDataSchema, type AiExtractedLeaderboardData } from '@/types';
 
-export const ExtractLeaderboardInputSchema = z.object({
+const ExtractLeaderboardInputSchema = z.object({
   imageDataUri: z
     .string()
     .describe(
