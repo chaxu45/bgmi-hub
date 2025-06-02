@@ -42,7 +42,7 @@ export default function AddTournamentPage() {
       dates: '',
       format: '',
       pointSystem: '',
-      imageUrl: '',
+      imageUrl: '', // Optional, so empty string is fine for initial state
       status: 'Upcoming', // Default to Upcoming
     },
   });
@@ -175,6 +175,7 @@ export default function AddTournamentPage() {
               <FormItem>
                 <FormLabel>Image URL (Optional)</FormLabel>
                 <FormControl>
+                  {/* Ensure field.value is not null/undefined for the input component */}
                   <Input placeholder="https://example.com/tournament-banner.png" {...field} value={field.value ?? ''} />
                 </FormControl>
                 <FormDescription>
@@ -235,3 +236,4 @@ export default function AddTournamentPage() {
     </div>
   );
 }
+

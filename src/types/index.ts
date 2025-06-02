@@ -26,7 +26,10 @@ export const TournamentSchema = z.object({
   dates: z.string().min(1, "Dates are required"),
   format: z.string().optional(),
   pointSystem: z.string().optional(),
-  imageUrl: z.string().url().optional(),
+  imageUrl: z.preprocess(
+    (val) => (val === "" || val === null ? undefined : val),
+    z.string().url("Invalid URL format for Image URL").optional()
+  ),
   status: z.enum(['Ongoing', 'Upcoming', 'Completed']),
 });
 export type Tournament = z.infer<typeof TournamentSchema>;
