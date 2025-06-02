@@ -15,21 +15,25 @@ async function readPredictionQuestions(): Promise<PredictionQuestion[]> {
       await fs.promises.mkdir(dataDir, { recursive: true });
     }
     if (!fs.existsSync(questionsFilePath)) {
+      // If file doesn't exist, create it with an empty array
       await fs.promises.writeFile(questionsFilePath, JSON.stringify([], null, 2), 'utf-8');
       return [];
     }
     const jsonData = await fs.promises.readFile(questionsFilePath, 'utf-8');
-    // Ensure googleFormLink is present, default to undefined if missing during parse
-    // and ensure other fields are handled if they are missing in old data
-    return (JSON.parse(jsonData) as any[]).map(q => ({
-        id: q.id || crypto.randomUUID(), // Ensure id exists
+    // Ensure data is parsed correctly and defaults are applied if fields are missing
+    const parsedData = JSON.parse(jsonData) as any[];
+    return parsedData.map(q => ({
+        id: q.id || crypto.randomUUID(),
         questionText: q.questionText || '',
         googleFormLink: q.googleFormLink || undefined,
-        createdAt: q.createdAt || new Date(0).toISOString(), // Ensure createdAt exists
+        createdAt: q.createdAt || new Date(0).toISOString(), // Default to a very old date if missing
     })) as PredictionQuestion[];
   } catch (error) {
     console.error('Error reading prediction questions file:', error);
+    // If ENOENT, it means file didn't exist, which should be handled by creation logic above
+    // but if it's another error, rethrow or handle appropriately
     if ((error as NodeJS.ErrnoException).code === 'ENOENT') {
+      // This case should ideally not be hit if creation logic above works, but as a fallback:
       return [];
     }
     throw new Error('Could not read prediction questions data.');
@@ -60,7 +64,7 @@ export async function GET(request: NextRequest) {
     if (sortedQuestions.length > 0) {
       return NextResponse.json(sortedQuestions[0]); // Return the latest one
     }
-    return NextResponse.json(null, { status: 200 }); // No question found
+    return NextResponse.json(null, { status: 200 }); // No question found, return null
   } catch (error) {
     console.error("Error in GET /api/predictions/questions:", error);
     return NextResponse.json({ message: 'Error fetching prediction questions', error: (error as Error).message }, { status: 500 });
