@@ -3,7 +3,7 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Home, Trophy, Users, ListOrdered, PlusCircle, CalendarPlus, UserPlus, ListChecks } from 'lucide-react';
+import { Home, Trophy, Users, ListOrdered, PlusCircle, CalendarPlus, UserPlus, ListChecks, HelpCircleIcon } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 
@@ -19,6 +19,7 @@ const adminNavItems = [
   { href: '/admin/add-tournament', label: 'Add Tournament', icon: CalendarPlus },
   { href: '/admin/add-team', label: 'Add Team', icon: UserPlus },
   { href: '/admin/update-leaderboard', label: 'Update Leaderboard', icon: ListChecks },
+  { href: '/admin/add-prediction', label: 'Add Prediction', icon: HelpCircleIcon },
 ];
 
 export function NavMenu() {
@@ -26,8 +27,6 @@ export function NavMenu() {
 
   let navItems = [...publicNavItems];
 
-  // Only show admin items in development mode
-  // In a production environment, process.env.NODE_ENV will be 'production'
   if (process.env.NODE_ENV === 'development') {
     navItems = [...navItems, ...adminNavItems];
   }

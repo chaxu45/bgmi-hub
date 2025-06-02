@@ -60,3 +60,28 @@ export const TournamentLeaderboardSchema = z.object({
   ).optional().default([]),
 });
 export type TournamentLeaderboard = z.infer<typeof TournamentLeaderboardSchema>;
+
+export const PredictionQuestionSchema = z.object({
+  id: z.string(),
+  questionText: z.string().min(1, "Question text is required"),
+  options: z.array(z.string()).optional().default([]), // Stored as array of strings
+  correctAnswer: z.string().min(1, "Correct answer is required"),
+  rewardDescription: z.string().min(1, "Reward description is required"),
+  status: z.enum(['active', 'closed']),
+  createdAt: z.string(), // ISO date string
+});
+export type PredictionQuestion = z.infer<typeof PredictionQuestionSchema>;
+
+// Schema for the admin form when creating a question
+export const CreatePredictionQuestionFormSchema = z.object({
+  questionText: z.string().min(1, "Question text is required"),
+  options: z.array(z.object({ value: z.string().min(1, "Option cannot be empty if field is added.") })).optional().default([]),
+  correctAnswer: z.string().min(1, "Correct answer is required"),
+  rewardDescription: z.string().min(1, "Reward description is required"),
+  status: z.enum(['active', 'closed']).default('active'),
+});
+export type CreatePredictionQuestionFormValues = z.infer<typeof CreatePredictionQuestionFormSchema>;
+
+// Schema used for POST API before adding id and createdAt
+export const CreatePredictionQuestionApiSchema = PredictionQuestionSchema.omit({ id: true, createdAt: true });
+
