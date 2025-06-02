@@ -22,7 +22,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { PageHeader } from '@/components/shared/page-header';
 import { useToast } from '@/hooks/use-toast';
 import { CreatePredictionQuestionFormSchema, type CreatePredictionQuestionFormValues } from '@/types';
-import { PlusCircle, Trash2, HelpCircleIcon } from 'lucide-react';
+import { PlusCircle, Trash2, HelpCircleIcon, Link as LinkIcon } from 'lucide-react';
 import { Separator } from '@/components/ui/separator';
 
 export default function AddPredictionPage() {
@@ -36,6 +36,7 @@ export default function AddPredictionPage() {
       correctAnswer: '',
       rewardDescription: '',
       status: 'active',
+      googleFormLink: '',
     },
   });
 
@@ -178,6 +179,31 @@ export default function AddPredictionPage() {
               </FormItem>
             )}
           />
+          
+          <FormField
+            control={form.control}
+            name="googleFormLink"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Google Form Link (Optional)</FormLabel>
+                <FormControl>
+                  <div className="flex items-center space-x-2">
+                    <LinkIcon className="h-5 w-5 text-muted-foreground" />
+                    <Input 
+                      placeholder="https://docs.google.com/forms/..." 
+                      {...field} 
+                      value={field.value ?? ''}
+                    />
+                  </div>
+                </FormControl>
+                <FormDescription>
+                  Link to the Google Form where users will submit their answers.
+                </FormDescription>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
 
           <FormField
             control={form.control}

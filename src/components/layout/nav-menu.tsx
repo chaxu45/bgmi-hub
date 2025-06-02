@@ -3,7 +3,7 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Home, Trophy, Users, ListOrdered, PlusCircle, CalendarPlus, UserPlus, ListChecks, HelpCircleIcon } from 'lucide-react';
+import { Home, Trophy, Users, ListOrdered, PlusCircle, CalendarPlus, UserPlus, ListChecks, HelpCircleIcon, Gift } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 
@@ -12,6 +12,7 @@ const publicNavItems = [
   { href: '/tournaments', label: 'Tournaments', icon: Trophy },
   { href: '/teams', label: 'Teams', icon: Users },
   { href: '/leaderboards', label: 'Leaderboards', icon: ListOrdered },
+  { href: '/predict-and-win', label: 'Predict & Win', icon: Gift },
 ];
 
 const adminNavItems = [

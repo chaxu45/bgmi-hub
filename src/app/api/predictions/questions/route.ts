@@ -19,12 +19,15 @@ async function readPredictionQuestions(): Promise<PredictionQuestion[]> {
       return [];
     }
     const jsonData = await fs.promises.readFile(questionsFilePath, 'utf-8');
-    return JSON.parse(jsonData) as PredictionQuestion[];
+    // Ensure googleFormLink is present, default to undefined if missing during parse
+    return (JSON.parse(jsonData) as any[]).map(q => ({
+        ...q,
+        googleFormLink: q.googleFormLink || undefined,
+    })) as PredictionQuestion[];
   } catch (error) {
     console.error('Error reading prediction questions file:', error);
-    // If file doesn't exist or is corrupted, return empty array or re-throw
     if ((error as NodeJS.ErrnoException).code === 'ENOENT') {
-      return []; // Or create the file with an empty array
+      return [];
     }
     throw new Error('Could not read prediction questions data.');
   }
@@ -65,15 +68,13 @@ export async function POST(request: NextRequest) {
   try {
     const requestBody: CreatePredictionQuestionFormValues = await request.json();
     
-    // Validate using the form schema
     const validationResult = CreatePredictionQuestionFormSchema.safeParse(requestBody);
     if (!validationResult.success) {
       return NextResponse.json({ message: 'Invalid prediction question data', errors: validationResult.error.flatten().fieldErrors }, { status: 400 });
     }
 
-    const { questionText, options, correctAnswer, rewardDescription, status } = validationResult.data;
+    const { questionText, options, correctAnswer, rewardDescription, status, googleFormLink } = validationResult.data;
 
-    // Transform options from array of objects to array of strings
     const transformedOptions = options ? options.map(opt => opt.value) : [];
 
     const newQuestion: PredictionQuestion = {
@@ -83,6 +84,7 @@ export async function POST(request: NextRequest) {
       correctAnswer,
       rewardDescription,
       status,
+      googleFormLink: googleFormLink || undefined, // Ensure it's undefined if empty
       createdAt: new Date().toISOString(),
     };
 

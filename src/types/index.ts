@@ -68,6 +68,10 @@ export const PredictionQuestionSchema = z.object({
   correctAnswer: z.string().min(1, "Correct answer is required"),
   rewardDescription: z.string().min(1, "Reward description is required"),
   status: z.enum(['active', 'closed']),
+  googleFormLink: z.preprocess( // Added this
+    (val) => (val === "" || val === null ? undefined : val),
+    z.string().url("Invalid URL for Google Form Link").optional()
+  ),
   createdAt: z.string(), // ISO date string
 });
 export type PredictionQuestion = z.infer<typeof PredictionQuestionSchema>;
@@ -79,9 +83,12 @@ export const CreatePredictionQuestionFormSchema = z.object({
   correctAnswer: z.string().min(1, "Correct answer is required"),
   rewardDescription: z.string().min(1, "Reward description is required"),
   status: z.enum(['active', 'closed']).default('active'),
+  googleFormLink: z.preprocess( // Added this
+    (val) => (val === "" || val === null ? undefined : val),
+    z.string().url("Invalid URL for Google Form Link").optional()
+  ),
 });
 export type CreatePredictionQuestionFormValues = z.infer<typeof CreatePredictionQuestionFormSchema>;
 
 // Schema used for POST API before adding id and createdAt
 export const CreatePredictionQuestionApiSchema = PredictionQuestionSchema.omit({ id: true, createdAt: true });
-
