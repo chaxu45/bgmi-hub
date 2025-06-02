@@ -1,0 +1,42 @@
+
+[
+  {
+    "id": "t1",
+    "name": "BGMI India Series (BGIS) 2024",
+    "organizer": "Krafton India",
+    "prizePool": "₹2,00,00,000",
+    "dates": "August 1 - September 15, 2024",
+    "format": "Squads, TPP, Online Qualifiers, LAN Finals",
+    "pointSystem": "Standard points system with placement and kill points.",
+    "imageUrl": "https://placehold.co/600x400.png",
+    "status": "Upcoming"
+  },
+  {
+    "id": "t2",
+    "name": "Skyesports Championship 5.0 BGMI",
+    "organizer": "Skyesports",
+    "prizePool": "₹1,00,00,000",
+    "dates": "July 25 - August 30, 2024",
+    "format": "Squads, TPP, Invitational + Qualifiers",
+    "imageUrl": "https://placehold.co/600x400.png",
+    "status": "Ongoing"
+  },
+  {
+    "id": "t3",
+    "name": "BGMI Pro Series (BMPS) 2024 Season 2",
+    "organizer": "Krafton India",
+    "prizePool": "₹1,50,00,000",
+    "dates": "October 10 - November 25, 2024",
+    "status": "Upcoming",
+    "imageUrl": "https://placehold.co/600x400.png"
+  },
+  {
+    "id": "t4",
+    "name": "India Today Gaming BGMI Cup",
+    "organizer": "India Today Gaming",
+    "prizePool": "₹50,00,000",
+    "dates": "June 1 - July 10, 2024",
+    "status": "Completed",
+    "imageUrl": "https://placehold.co/600x400.png"
+  }
+]

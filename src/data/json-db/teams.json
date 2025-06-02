@@ -1,0 +1,51 @@
+
+[
+  {
+    "id": "team1",
+    "name": "Team SouL",
+    "logoUrl": "https://placehold.co/100x100.png",
+    "description": "One of the most popular and successful BGMI teams in India.",
+    "roster": [
+      { "id": "p1", "name": "Omega", "ign": "SouLOmega", "role": "IGL" },
+      { "id": "p2", "name": "Goblin", "ign": "SouLGoblin", "role": "Assaulter" },
+      { "id": "p3", "name": "AkshaT", "ign": "SouLAkshaT", "role": "Assaulter" },
+      { "id": "p4", "name": "Hector", "ign": "SouLHector", "role": "Support" }
+    ]
+  },
+  {
+    "id": "team2",
+    "name": "GodLike Esports",
+    "logoUrl": "https://placehold.co/100x100.png",
+    "description": "A powerhouse in Indian BGMI, known for its aggressive gameplay.",
+    "roster": [
+      { "id": "p5", "name": "Jonathan", "ign": "GodLJonathan", "role": "Assaulter" },
+      { "id": "p6", "name": "ClutchGod", "ign": "GodLClutchGod", "role": "IGL" },
+      { "id": "p7", "name": "ZGOD", "ign": "GodLZGOD", "role": "Support" },
+      { "id": "p8", "name": "Neyoo", "ign": "GodLNeyoo", "role": "Entry Fragger" }
+    ]
+  },
+  {
+    "id": "team3",
+    "name": "Team XSpark",
+    "logoUrl": "https://placehold.co/100x100.png",
+    "description": "Led by Scout, a fan-favorite team with a strong lineup.",
+    "roster": [
+      { "id": "p9", "name": "Scout", "ign": "TXScout", "role": "IGL/Assaulter" },
+      { "id": "p10", "name": "Mavi", "ign": "TXMavi", "role": "IGL" },
+      { "id": "p11", "name": "Aditya", "ign": "TXAditya", "role": "Assaulter" },
+      { "id": "p12", "name": "Pukar", "ign": "TXPukar", "role": "Support" }
+    ]
+  },
+  {
+    "id": "team4",
+    "name": "OR Esports",
+    "logoUrl": "https://placehold.co/100x100.png",
+    "description": "Consistently performing team with skilled players.",
+    "roster": [
+      { "id": "p13", "name": "Jelly", "ign": "ORJelly", "role": "IGL" },
+      { "id": "p14", "name": "Maxx", "ign": "ORMaxx", "role": "Assaulter" },
+      { "id": "p15", "name": "Attanki", "ign": "ORAttanki", "role": "Entry Fragger" },
+      { "id": "p16", "name": "Admino", "ign": "ORAdmino", "role": "Support" }
+    ]
+  }
+]

@@ -1,0 +1,30 @@
+
+[
+  {
+    "id": "1",
+    "title": "Major BGMI Tournament Announced for Q3 2024",
+    "summary": "A new major BGMI tournament with a massive prize pool has been announced by Krafton India, scheduled for the third quarter of 2024.",
+    "imageUrl": "https://placehold.co/600x400.png",
+    "source": "BGMI Official",
+    "publishedDate": "2024-07-20",
+    "link": "https://example.com/news1"
+  },
+  {
+    "id": "2",
+    "title": "Team Velocity crowned champions of BGMI Masters Series",
+    "summary": "Team Velocity showcased an incredible performance to win the BGMI Masters Series, taking home the lion's share of the prize pool.",
+    "imageUrl": "https://placehold.co/600x400.png",
+    "source": "Esports Insider",
+    "publishedDate": "2024-07-18",
+    "link": "https://example.com/news2"
+  },
+  {
+    "id": "3",
+    "title": "BGMI Update 3.5: New Map and Features Coming Soon",
+    "summary": "The upcoming BGMI update 3.5 is rumored to introduce a new map, several gameplay enhancements, and new weapon skins.",
+    "imageUrl": "https://placehold.co/600x400.png",
+    "source": "Gaming News Hub",
+    "publishedDate": "2024-07-15",
+    "link": "https://example.com/news3"
+  }
+]

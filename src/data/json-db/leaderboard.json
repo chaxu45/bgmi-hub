@@ -1,0 +1,13 @@
+
+{
+  "tournamentId": "t2",
+  "tournamentName": "Skyesports Championship 5.0 BGMI (Ongoing)",
+  "entries": [
+    { "rank": 1, "teamName": "GodLike Esports", "teamLogoUrl": "https://placehold.co/50x50.png", "points": 120, "matchesPlayed": 10 },
+    { "rank": 2, "teamName": "Team SouL", "teamLogoUrl": "https://placehold.co/50x50.png", "points": 115, "matchesPlayed": 10 },
+    { "rank": 3, "teamName": "OR Esports", "teamLogoUrl": "https://placehold.co/50x50.png", "points": 100, "matchesPlayed": 10 },
+    { "rank": 4, "teamName": "Team XSpark", "teamLogoUrl": "https://placehold.co/50x50.png", "points": 95, "matchesPlayed": 10 },
+    { "rank": 5, "teamName": "Blind Esports", "teamLogoUrl": "https://placehold.co/50x50.png", "points": 92, "matchesPlayed": 10 },
+    { "rank": 6, "teamName": "Revenant Esports", "teamLogoUrl": "https://placehold.co/50x50.png", "points": 88, "matchesPlayed": 10 }
+  ]
+}

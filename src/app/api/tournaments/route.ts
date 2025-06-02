@@ -1,25 +1,88 @@
 
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
-import { mockTournaments } from '@/data/mock-data';
-import type { Tournament } from '@/types';
+import fs from 'fs';
+import path from 'path';
+import { TournamentSchema, type Tournament } from '@/types';
+import { z } from 'zod';
+import crypto from 'crypto';
+
+const tournamentsFilePath = path.join(process.cwd(), 'src', 'data', 'json-db', 'tournaments.json');
+
+async function readTournaments(): Promise<Tournament[]> {
+  try {
+    const jsonData = await fs.promises.readFile(tournamentsFilePath, 'utf-8');
+    return JSON.parse(jsonData) as Tournament[];
+  } catch (error) {
+    console.error('Error reading tournaments file:', error);
+    if ((error as NodeJS.ErrnoException).code === 'ENOENT') {
+      return [];
+    }
+    throw new Error('Could not read tournaments data.');
+  }
+}
+
+async function writeTournaments(data: Tournament[]): Promise<void> {
+  try {
+    const jsonData = JSON.stringify(data, null, 2);
+    await fs.promises.writeFile(tournamentsFilePath, jsonData, 'utf-8');
+  } catch (error) {
+    console.error('Error writing tournaments file:', error);
+    throw new Error('Could not write tournaments data.');
+  }
+}
 
 export async function GET(request: NextRequest) {
-  const { searchParams } = new URL(request.url);
-  const statusParam = searchParams.get('status');
-  const limitParam = searchParams.get('limit');
-  const limit = limitParam ? parseInt(limitParam, 10) : undefined;
+  try {
+    const { searchParams } = new URL(request.url);
+    const statusParam = searchParams.get('status');
+    const limitParam = searchParams.get('limit');
+    const limit = limitParam ? parseInt(limitParam, 10) : undefined;
 
-  let tournamentsResult = mockTournaments;
+    let tournamentsResult = await readTournaments();
 
-  if (statusParam) {
-    const statuses = statusParam.split(',') as Array<Tournament['status']>;
-    tournamentsResult = tournamentsResult.filter(t => statuses.includes(t.status));
+    if (statusParam) {
+      const statuses = statusParam.split(',') as Array<Tournament['status']>;
+      tournamentsResult = tournamentsResult.filter(t => statuses.includes(t.status));
+    }
+
+    if (limit) {
+      tournamentsResult = tournamentsResult.slice(0, limit);
+    }
+
+    return NextResponse.json(tournamentsResult);
+  } catch (error) {
+    console.error("Error in GET /api/tournaments:", error);
+    return NextResponse.json({ message: 'Error fetching tournaments', error: (error as Error).message }, { status: 500 });
   }
+}
 
-  if (limit) {
-    tournamentsResult = tournamentsResult.slice(0, limit);
+const CreateTournamentSchema = TournamentSchema.omit({ id: true });
+
+export async function POST(request: NextRequest) {
+  try {
+    const requestBody = await request.json();
+    const validationResult = CreateTournamentSchema.safeParse(requestBody);
+
+    if (!validationResult.success) {
+      return NextResponse.json({ message: 'Invalid tournament data', errors: validationResult.error.flatten().fieldErrors }, { status: 400 });
+    }
+
+    const newTournamentData = validationResult.data;
+    const tournaments = await readTournaments();
+    
+    const newTournament: Tournament = {
+      ...newTournamentData,
+      id: crypto.randomUUID(),
+    };
+
+    tournaments.push(newTournament);
+    await writeTournaments(tournaments);
+
+    return NextResponse.json(newTournament, { status: 201 });
+  } catch (error) {
+    console.error("Error in POST /api/tournaments:", error);
+    const errorMessage = error instanceof Error ? error.message : 'An unexpected error occurred';
+    return NextResponse.json({ message: 'Error creating tournament', error: errorMessage }, { status: 500 });
   }
-
-  return NextResponse.json(tournamentsResult);
 }
