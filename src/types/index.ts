@@ -55,11 +55,14 @@ export const TeamSchema = z.object({
 export type Team = z.infer<typeof TeamSchema>;
 
 export const LeaderboardEntrySchema = z.object({
-  rank: z.number().int().positive(),
+  rank: z.number({invalid_type_error: "Rank must be a number."}).int("Rank must be an integer.").positive("Rank must be positive."),
   teamName: z.string().min(1, "Team name is required"),
-  teamLogoUrl: z.string().url().optional(),
-  points: z.number().int(),
-  matchesPlayed: z.number().int().optional(),
+  teamLogoUrl: z.preprocess(
+    (val) => (val === "" || val === null ? undefined : val),
+    z.string().url("Invalid URL for team logo. Please ensure it's a valid HTTP/HTTPS URL.").optional()
+  ),
+  points: z.number({invalid_type_error: "Points must be a number."}).int("Points must be an integer."),
+  matchesPlayed: z.number({invalid_type_error: "Matches played must be a number."}).int("Matches played must be an integer.").optional(),
 });
 export type LeaderboardEntry = z.infer<typeof LeaderboardEntrySchema>;
 
@@ -69,3 +72,19 @@ export const TournamentLeaderboardSchema = z.object({
   entries: z.array(LeaderboardEntrySchema),
 });
 export type TournamentLeaderboard = z.infer<typeof TournamentLeaderboardSchema>;
+
+// Schema for AI extraction output
+export const AiExtractedLeaderboardEntrySchema = z.object({
+  rank: z.number().int().positive().describe("Player's rank in the leaderboard."),
+  teamName: z.string().describe("Name of the team."),
+  points: z.number().int().describe("Total points scored by the team."),
+  matchesPlayed: z.number().int().optional().describe("Number of matches played by the team (if available)."),
+  teamLogoUrl: z.string().optional().describe("URL of the team logo, if visible. Otherwise omit or leave empty."),
+});
+export type AiExtractedLeaderboardEntry = z.infer<typeof AiExtractedLeaderboardEntrySchema>;
+
+export const AiExtractedLeaderboardDataSchema = z.object({
+  tournamentName: z.string().describe("Name of the tournament as seen in the image. Use 'Tournament Name from Image' if not found."),
+  entries: z.array(AiExtractedLeaderboardEntrySchema).describe("List of leaderboard entries extracted from the image."),
+});
+export type AiExtractedLeaderboardData = z.infer<typeof AiExtractedLeaderboardDataSchema>;
