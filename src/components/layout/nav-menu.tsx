@@ -3,15 +3,18 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Newspaper, Trophy, Users, ListOrdered, Home, PlusCircle, CalendarPlus, UserPlus, ListChecks } from 'lucide-react';
+import { Home, Trophy, Users, ListOrdered, PlusCircle, CalendarPlus, UserPlus, ListChecks } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 
-const navItems = [
+const publicNavItems = [
   { href: '/', label: 'Home', icon: Home },
   { href: '/tournaments', label: 'Tournaments', icon: Trophy },
   { href: '/teams', label: 'Teams', icon: Users },
   { href: '/leaderboards', label: 'Leaderboards', icon: ListOrdered },
+];
+
+const adminNavItems = [
   { href: '/admin/add-news', label: 'Add News', icon: PlusCircle },
   { href: '/admin/add-tournament', label: 'Add Tournament', icon: CalendarPlus },
   { href: '/admin/add-team', label: 'Add Team', icon: UserPlus },
@@ -20,6 +23,14 @@ const navItems = [
 
 export function NavMenu() {
   const pathname = usePathname();
+
+  let navItems = [...publicNavItems];
+
+  // Only show admin items in development mode
+  // In a production environment, process.env.NODE_ENV will be 'production'
+  if (process.env.NODE_ENV === 'development') {
+    navItems = [...navItems, ...adminNavItems];
+  }
 
   return (
     <nav className="flex items-center gap-1 sm:gap-2"> {/* Adjusted gap for more items */}
