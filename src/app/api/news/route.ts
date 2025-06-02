@@ -41,6 +41,9 @@ export async function GET(request: NextRequest) {
 
     let articles = await readNews();
 
+    // Sort articles by publishedDate in descending order (newest first)
+    articles.sort((a, b) => new Date(b.publishedDate).getTime() - new Date(a.publishedDate).getTime());
+
     if (limit) {
       articles = articles.slice(0, limit);
     }
@@ -82,3 +85,4 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ message: 'Error creating news article', error: errorMessage }, { status: 500 });
   }
 }
+

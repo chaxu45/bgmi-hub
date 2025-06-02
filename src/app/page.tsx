@@ -7,6 +7,8 @@ import Link from 'next/link';
 import { ArrowRight, Users as UsersIcon, ListOrdered as ListOrderedIcon } from 'lucide-react'; // Renamed to avoid conflict
 import type { NewsArticle, Tournament } from '@/types';
 
+export const dynamic = 'force-dynamic'; // Ensures the page is always dynamically rendered
+
 async function getFeaturedNews(): Promise<NewsArticle[]> {
   try {
     const res = await fetch(`${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:9002'}/api/news?limit=3`, { cache: 'no-store' });
@@ -84,3 +86,4 @@ export default async function HomePage() {
     </div>
   );
 }
+
