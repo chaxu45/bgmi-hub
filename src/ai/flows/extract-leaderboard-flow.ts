@@ -9,7 +9,7 @@
  */
 
 import { ai } from '@/ai/genkit';
-import { z } from 'genkit/zod';
+import { z } from 'zod';
 import { AiExtractedLeaderboardDataSchema, AiExtractedLeaderboardEntrySchema } from '@/types';
 
 export const ExtractLeaderboardInputSchema = z.object({
@@ -69,3 +69,4 @@ const extractLeaderboardFlow = ai.defineFlow(
     };
   }
 );
+
