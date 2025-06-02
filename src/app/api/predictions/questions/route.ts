@@ -81,7 +81,7 @@ export async function POST(request: NextRequest) {
     const newQuestion: PredictionQuestion = {
       id: crypto.randomUUID(),
       questionText,
-      googleFormLink: googleFormLink || undefined, // Ensure it's undefined if empty
+      googleFormLink: googleFormLink || undefined, 
       createdAt: new Date().toISOString(),
     };
 
@@ -90,7 +90,7 @@ export async function POST(request: NextRequest) {
     await writePredictionQuestions(questions);
 
     return NextResponse.json(newQuestion, { status: 201 });
-  } catch (error) { // This is line 93 referenced in the error. The '{' is crucial.
+  } catch (error) {
     console.error("Error in POST /api/predictions/questions:", error);
     const errorMessage = error instanceof Error ? error.message : 'An unexpected error occurred';
     return NextResponse.json({ message: 'Error creating prediction question', error: errorMessage }, { status: 500 });
