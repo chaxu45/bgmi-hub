@@ -1,3 +1,4 @@
+
 import Image from 'next/image';
 import type { Tournament } from '@/types';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
@@ -9,13 +10,15 @@ interface TournamentCardProps {
 }
 
 export function TournamentCard({ tournament }: TournamentCardProps) {
+  const displayImageUrl = tournament.imageUrls && tournament.imageUrls.length > 0 ? tournament.imageUrls[0] : null;
+
   return (
     <Card className="flex flex-col overflow-hidden h-full shadow-lg hover:shadow-xl transition-shadow duration-300">
       <CardHeader>
-        {tournament.imageUrl && (
+        {displayImageUrl && (
           <div className="relative w-full h-48 mb-4">
             <Image
-              src={tournament.imageUrl}
+              src={displayImageUrl}
               alt={tournament.name}
               layout="fill"
               objectFit="cover"

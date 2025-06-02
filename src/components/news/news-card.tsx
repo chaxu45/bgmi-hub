@@ -11,13 +11,15 @@ interface NewsCardProps {
 }
 
 export function NewsCard({ article }: NewsCardProps) {
+  const displayImageUrl = article.imageUrls && article.imageUrls.length > 0 ? article.imageUrls[0] : null;
+
   return (
     <Card className="flex flex-col overflow-hidden h-full shadow-lg hover:shadow-xl transition-shadow duration-300">
       <CardHeader>
-        {article.imageUrl && (
+        {displayImageUrl && (
           <div className="relative w-full h-48 mb-4">
             <Image
-              src={article.imageUrl}
+              src={displayImageUrl}
               alt={article.title}
               layout="fill"
               objectFit="cover"
@@ -46,4 +48,3 @@ export function NewsCard({ article }: NewsCardProps) {
     </Card>
   );
 }
-

@@ -12,7 +12,17 @@ const tournamentsFilePath = path.join(process.cwd(), 'src', 'data', 'json-db', '
 async function readTournaments(): Promise<Tournament[]> {
   try {
     const jsonData = await fs.promises.readFile(tournamentsFilePath, 'utf-8');
-    return JSON.parse(jsonData) as Tournament[];
+    const parsedData = JSON.parse(jsonData) as any[]; // Read as any first
+    // Ensure imageUrls is an array, convert old string imageUrl if necessary
+    return parsedData.map(tournament => {
+      if (typeof tournament.imageUrl === 'string') {
+        return { ...tournament, imageUrls: [tournament.imageUrl], imageUrl: undefined };
+      }
+      if (tournament.imageUrl === undefined && !Array.isArray(tournament.imageUrls)) {
+         return { ...tournament, imageUrls: [] };
+      }
+      return tournament;
+    }) as Tournament[];
   } catch (error) {
     console.error('Error reading tournaments file:', error);
     if ((error as NodeJS.ErrnoException).code === 'ENOENT') {
@@ -62,7 +72,12 @@ const CreateTournamentSchema = TournamentSchema.omit({ id: true });
 export async function POST(request: NextRequest) {
   try {
     const requestBody = await request.json();
-    const validationResult = CreateTournamentSchema.safeParse(requestBody);
+     // Ensure imageUrls is an array, even if not provided or empty
+    const validatedBody = {
+      ...requestBody,
+      imageUrls: Array.isArray(requestBody.imageUrls) ? requestBody.imageUrls : [],
+    };
+    const validationResult = CreateTournamentSchema.safeParse(validatedBody);
 
     if (!validationResult.success) {
       return NextResponse.json({ message: 'Invalid tournament data', errors: validationResult.error.flatten().fieldErrors }, { status: 400 });

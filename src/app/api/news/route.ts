@@ -12,10 +12,19 @@ const newsFilePath = path.join(process.cwd(), 'src', 'data', 'json-db', 'news.js
 async function readNews(): Promise<NewsArticle[]> {
   try {
     const jsonData = await fs.promises.readFile(newsFilePath, 'utf-8');
-    return JSON.parse(jsonData) as NewsArticle[];
+    const parsedData = JSON.parse(jsonData) as any[]; // Read as any first
+    // Ensure imageUrls is an array, convert old string imageUrl if necessary
+    return parsedData.map(article => {
+      if (typeof article.imageUrl === 'string') {
+        return { ...article, imageUrls: [article.imageUrl], imageUrl: undefined };
+      }
+      if (article.imageUrl === undefined && !Array.isArray(article.imageUrls)) {
+         return { ...article, imageUrls: [] };
+      }
+      return article;
+    }) as NewsArticle[];
   } catch (error) {
     console.error('Error reading news file:', error);
-    // If the file doesn't exist or is empty, return an empty array
     if ((error as NodeJS.ErrnoException).code === 'ENOENT') {
       return [];
     }
@@ -41,7 +50,6 @@ export async function GET(request: NextRequest) {
 
     let articles = await readNews();
 
-    // Sort articles by publishedDate in descending order (newest first)
     articles.sort((a, b) => new Date(b.publishedDate).getTime() - new Date(a.publishedDate).getTime());
 
     if (limit) {
@@ -55,13 +63,17 @@ export async function GET(request: NextRequest) {
   }
 }
 
-// Zod schema for POST request body (excluding id, which will be generated)
 const CreateNewsArticleSchema = NewsArticleSchema.omit({ id: true });
 
 export async function POST(request: NextRequest) {
   try {
     const requestBody = await request.json();
-    const validationResult = CreateNewsArticleSchema.safeParse(requestBody);
+    // Ensure imageUrls is an array, even if not provided or empty
+    const validatedBody = {
+      ...requestBody,
+      imageUrls: Array.isArray(requestBody.imageUrls) ? requestBody.imageUrls : [],
+    };
+    const validationResult = CreateNewsArticleSchema.safeParse(validatedBody);
 
     if (!validationResult.success) {
       return NextResponse.json({ message: 'Invalid article data', errors: validationResult.error.flatten().fieldErrors }, { status: 400 });
@@ -72,7 +84,7 @@ export async function POST(request: NextRequest) {
     
     const newArticle: NewsArticle = {
       ...newArticleData,
-      id: crypto.randomUUID(), // Generate a unique ID
+      id: crypto.randomUUID(),
     };
 
     articles.push(newArticle);
@@ -85,4 +97,3 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ message: 'Error creating news article', error: errorMessage }, { status: 500 });
   }
 }
-

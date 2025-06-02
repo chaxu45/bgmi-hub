@@ -5,10 +5,9 @@ export const NewsArticleSchema = z.object({
   id: z.string(),
   title: z.string().min(1, "Title is required"),
   summary: z.string().min(1, "Summary is required"),
-  imageUrl: z.preprocess(
-    (val) => (val === "" || val === null ? undefined : val),
-    z.string().url("Invalid URL format for Image URL").optional()
-  ),
+  imageUrls: z.array(
+    z.string().url("Each image URL must be a valid URL.")
+  ).optional().default([]),
   source: z.string().min(1, "Source is required"),
   publishedDate: z.string().refine((date) => !isNaN(Date.parse(date)), "Invalid date format"),
   link: z.preprocess(
@@ -26,10 +25,9 @@ export const TournamentSchema = z.object({
   dates: z.string().min(1, "Dates are required"),
   format: z.string().optional(),
   pointSystem: z.string().optional(),
-  imageUrl: z.preprocess(
-    (val) => (val === "" || val === null ? undefined : val),
-    z.string().url("Invalid URL format for Image URL").optional()
-  ),
+  imageUrls: z.array(
+    z.string().url("Each image URL must be a valid URL.")
+  ).optional().default([]),
   status: z.enum(['Ongoing', 'Upcoming', 'Completed']),
 });
 export type Tournament = z.infer<typeof TournamentSchema>;
@@ -54,7 +52,6 @@ export const TeamSchema = z.object({
 });
 export type Team = z.infer<typeof TeamSchema>;
 
-// Updated TournamentLeaderboardSchema for image-based leaderboard
 export const TournamentLeaderboardSchema = z.object({
   tournamentId: z.string().min(1, "Tournament ID is required"),
   tournamentName: z.string().min(1, "Tournament name is required"),
@@ -64,7 +61,3 @@ export const TournamentLeaderboardSchema = z.object({
   ),
 });
 export type TournamentLeaderboard = z.infer<typeof TournamentLeaderboardSchema>;
-
-// Removed LeaderboardEntrySchema, AiExtractedLeaderboardEntrySchema, and AiExtractedLeaderboardDataSchema
-// as they are no longer needed for the image-based leaderboard.
-
