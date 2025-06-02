@@ -15,28 +15,27 @@ async function readPredictionQuestions(): Promise<PredictionQuestion[]> {
       await fs.promises.mkdir(dataDir, { recursive: true });
     }
     if (!fs.existsSync(questionsFilePath)) {
-      // If file doesn't exist, create it with an empty array
       await fs.promises.writeFile(questionsFilePath, JSON.stringify([], null, 2), 'utf-8');
       return [];
     }
     const jsonData = await fs.promises.readFile(questionsFilePath, 'utf-8');
-    // Ensure data is parsed correctly and defaults are applied if fields are missing
     const parsedData = JSON.parse(jsonData) as any[];
+    // Map to the simplified PredictionQuestion structure, ensuring all required fields are present
     return parsedData.map(q => ({
         id: q.id || crypto.randomUUID(),
         questionText: q.questionText || '',
-        googleFormLink: q.googleFormLink || undefined,
-        createdAt: q.createdAt || new Date(0).toISOString(), // Default to a very old date if missing
-    })) as PredictionQuestion[];
+        googleFormLink: q.googleFormLink || undefined, 
+        createdAt: q.createdAt || new Date(0).toISOString(), // Provide a fallback createdAt
+    })).filter(q => q.questionText) as PredictionQuestion[]; // Filter out any potentially invalid entries
   } catch (error) {
     console.error('Error reading prediction questions file:', error);
-    // If ENOENT, it means file didn't exist, which should be handled by creation logic above
-    // but if it's another error, rethrow or handle appropriately
     if ((error as NodeJS.ErrnoException).code === 'ENOENT') {
-      // This case should ideally not be hit if creation logic above works, but as a fallback:
+      // If file doesn't exist, it will be created by the write function or above check.
       return [];
     }
-    throw new Error('Could not read prediction questions data.');
+    // For other errors, return an empty array to prevent cascading issues,
+    // as the calling functions might expect an array.
+    return [];
   }
 }
 
@@ -53,18 +52,18 @@ async function writePredictionQuestions(data: PredictionQuestion[]): Promise<voi
   }
 }
 
-// GET /api/predictions/questions - Returns the latest question based on createdAt
 export async function GET(request: NextRequest) {
   try {
     const questions = await readPredictionQuestions();
-    // Sort by creation date in descending order to get the latest one first
+    // Sort by createdAt descending to get the latest
     const sortedQuestions = questions
       .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
 
     if (sortedQuestions.length > 0) {
-      return NextResponse.json(sortedQuestions[0]); // Return the latest one
+      return NextResponse.json(sortedQuestions[0]); // Return the latest question
     }
-    return NextResponse.json(null, { status: 200 }); // No question found, return null
+    // If no questions, return null
+    return NextResponse.json(null, { status: 200 }); 
   } catch (error) {
     console.error("Error in GET /api/predictions/questions:", error);
     return NextResponse.json({ message: 'Error fetching prediction questions', error: (error as Error).message }, { status: 500 });
@@ -85,7 +84,7 @@ export async function POST(request: NextRequest) {
     const newQuestion: PredictionQuestion = {
       id: crypto.randomUUID(),
       questionText,
-      googleFormLink: googleFormLink || undefined, 
+      googleFormLink: googleFormLink || undefined, // Ensure optional link is handled
       createdAt: new Date().toISOString(),
     };
 
