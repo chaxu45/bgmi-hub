@@ -15,7 +15,14 @@ async function readLeaderboard(): Promise<TournamentLeaderboard | null> {
   } catch (error) {
     console.error('Error reading leaderboard file:', error);
     if ((error as NodeJS.ErrnoException).code === 'ENOENT') {
-      return null; // Return null if file doesn't exist
+      // If file doesn't exist, create a default one
+      const defaultLeaderboard: TournamentLeaderboard = {
+        tournamentId: `default-tournament-${Date.now()}`,
+        tournamentName: 'New Tournament Leaderboard',
+        leaderboardImageUrl: undefined,
+      };
+      await writeLeaderboard(defaultLeaderboard);
+      return defaultLeaderboard;
     }
     throw new Error('Could not read leaderboard data.');
   }
@@ -24,6 +31,11 @@ async function readLeaderboard(): Promise<TournamentLeaderboard | null> {
 async function writeLeaderboard(data: TournamentLeaderboard): Promise<void> {
   try {
     const jsonData = JSON.stringify(data, null, 2);
+    // Ensure the directory exists
+    const dir = path.dirname(leaderboardFilePath);
+    if (!fs.existsSync(dir)) {
+        await fs.promises.mkdir(dir, { recursive: true });
+    }
     await fs.promises.writeFile(leaderboardFilePath, jsonData, 'utf-8');
   } catch (error) {
     console.error('Error writing leaderboard file:', error);
@@ -33,9 +45,14 @@ async function writeLeaderboard(data: TournamentLeaderboard): Promise<void> {
 
 export async function GET() {
   try {
-    const leaderboard = await readLeaderboard();
+    let leaderboard = await readLeaderboard();
     if (!leaderboard) {
-       return NextResponse.json({ message: 'Leaderboard data not found' }, { status: 404 });
+       // This case should ideally be handled by readLeaderboard creating a default
+       return NextResponse.json({ 
+         tournamentId: `default-fallback-${Date.now()}`, 
+         tournamentName: 'Leaderboard (Not Initialized)', 
+         leaderboardImageUrl: undefined 
+       }, { status: 200 });
     }
     return NextResponse.json(leaderboard);
   } catch (error) {
@@ -47,7 +64,12 @@ export async function GET() {
 export async function PUT(request: NextRequest) {
   try {
     const requestBody = await request.json();
-    const validationResult = TournamentLeaderboardSchema.safeParse(requestBody);
+    // Ensure leaderboardImageUrl is handled correctly if missing from payload
+    const parsedBody = {
+        ...requestBody,
+        leaderboardImageUrl: requestBody.leaderboardImageUrl || undefined,
+    };
+    const validationResult = TournamentLeaderboardSchema.safeParse(parsedBody);
 
     if (!validationResult.success) {
       return NextResponse.json({ message: 'Invalid leaderboard data', errors: validationResult.error.flatten().fieldErrors }, { status: 400 });
