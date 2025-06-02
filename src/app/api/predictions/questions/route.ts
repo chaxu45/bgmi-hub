@@ -90,4 +90,9 @@ export async function POST(request: NextRequest) {
     await writePredictionQuestions(questions);
 
     return NextResponse.json(newQuestion, { status: 201 });
-  } catch (error)
+  } catch (error) { // This is line 93 referenced in the error. The '{' is crucial.
+    console.error("Error in POST /api/predictions/questions:", error);
+    const errorMessage = error instanceof Error ? error.message : 'An unexpected error occurred';
+    return NextResponse.json({ message: 'Error creating prediction question', error: errorMessage }, { status: 500 });
+  }
+}
