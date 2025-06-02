@@ -3,7 +3,7 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Newspaper, Trophy, Users, ListOrdered, Home, PlusCircle } from 'lucide-react'; // Added PlusCircle
+import { Newspaper, Trophy, Users, ListOrdered, Home, PlusCircle, CalendarPlus } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 
@@ -12,7 +12,8 @@ const navItems = [
   { href: '/tournaments', label: 'Tournaments', icon: Trophy },
   { href: '/teams', label: 'Teams', icon: Users },
   { href: '/leaderboards', label: 'Leaderboards', icon: ListOrdered },
-  { href: '/admin/add-news', label: 'Add News', icon: PlusCircle }, // Added new nav item
+  { href: '/admin/add-news', label: 'Add News', icon: PlusCircle },
+  { href: '/admin/add-tournament', label: 'Add Tournament', icon: CalendarPlus },
 ];
 
 export function NavMenu() {
@@ -36,7 +37,7 @@ export function NavMenu() {
           >
             <Link href={item.href}>
               <item.icon className={cn('h-4 w-4 sm:h-5 sm:w-5', isActive ? 'text-accent' : 'text-muted-foreground group-hover:text-accent')} />
-              <span className="hidden md:inline">{item.label}</span> {/* Changed to md:inline to show labels earlier */}
+              <span className="hidden lg:inline">{item.label}</span> {/* Changed to lg:inline to show labels later */}
             </Link>
           </Button>
         );
@@ -44,4 +45,3 @@ export function NavMenu() {
     </nav>
   );
 }
-
