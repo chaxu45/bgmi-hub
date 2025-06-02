@@ -5,10 +5,16 @@ export const NewsArticleSchema = z.object({
   id: z.string(),
   title: z.string().min(1, "Title is required"),
   summary: z.string().min(1, "Summary is required"),
-  imageUrl: z.string().url().optional(),
+  imageUrl: z.preprocess(
+    (val) => (val === "" || val === null ? undefined : val),
+    z.string().url("Invalid URL format for Image URL").optional()
+  ),
   source: z.string().min(1, "Source is required"),
   publishedDate: z.string().refine((date) => !isNaN(Date.parse(date)), "Invalid date format"),
-  link: z.string().url("Invalid URL"),
+  link: z.preprocess(
+    (val) => (val === "" || val === null ? undefined : val),
+    z.string().url("Invalid URL format for Article Link").optional()
+  ),
 });
 export type NewsArticle = z.infer<typeof NewsArticleSchema>;
 
@@ -57,3 +63,4 @@ export const TournamentLeaderboardSchema = z.object({
   entries: z.array(LeaderboardEntrySchema),
 });
 export type TournamentLeaderboard = z.infer<typeof TournamentLeaderboardSchema>;
+

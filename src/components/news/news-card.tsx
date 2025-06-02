@@ -1,3 +1,4 @@
+
 import Image from 'next/image';
 import Link from 'next/link';
 import type { NewsArticle } from '@/types';
@@ -33,13 +34,16 @@ export function NewsCard({ article }: NewsCardProps) {
       <CardContent className="flex-grow">
         <p className="text-muted-foreground line-clamp-3">{article.summary}</p>
       </CardContent>
-      <CardFooter>
-        <Button asChild variant="link" className="text-accent p-0 h-auto">
-          <Link href={article.link} target="_blank" rel="noopener noreferrer">
-            Read More <ArrowRight className="ml-2 h-4 w-4" />
-          </Link>
-        </Button>
-      </CardFooter>
+      {article.link && (
+        <CardFooter>
+          <Button asChild variant="link" className="text-accent p-0 h-auto">
+            <Link href={article.link} target="_blank" rel="noopener noreferrer">
+              Read More <ArrowRight className="ml-2 h-4 w-4" />
+            </Link>
+          </Button>
+        </CardFooter>
+      )}
     </Card>
   );
 }
+
