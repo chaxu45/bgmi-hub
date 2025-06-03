@@ -67,7 +67,7 @@ export default async function PredictAndWinPage() {
          <Separator className="my-6" />
         <h3 className="text-xl font-semibold font-headline mb-4 text-center">Advertisement</h3>
         {/* Replace YOUR_AD_SLOT_ID_PREDICT_PAGE with an actual Ad Slot ID from your AdSense account */}
-        <AdsenseAdUnit adSlotId="YOUR_AD_SLOT_ID_PREDICT_PAGE" className="mx-auto max-w-full w-[300px] h-[250px] md:w-[728px] md:h-[90px] bg-muted/20 flex items-center justify-center text-muted-foreground rounded-md shadow" />
+        <AdsenseAdUnit adSlotId="9275193519" className="mx-auto max-w-full w-[300px] h-[250px] md:w-[728px] md:h-[90px] bg-muted/20 flex items-center justify-center text-muted-foreground rounded-md shadow" />
          <Separator className="my-6" />
       </section>
     </div>
