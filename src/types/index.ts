@@ -61,27 +61,4 @@ export const TournamentLeaderboardSchema = z.object({
 });
 export type TournamentLeaderboard = z.infer<typeof TournamentLeaderboardSchema>;
 
-// Simplified PredictionQuestionSchema
-export const PredictionQuestionSchema = z.object({
-  id: z.string(),
-  questionText: z.string().min(1, "Question text is required"),
-  googleFormLink: z.preprocess(
-    (val) => (val === "" || val === null ? undefined : val),
-    z.string().url("Invalid URL for Google Form Link").optional()
-  ),
-  createdAt: z.string(), // ISO date string
-});
-export type PredictionQuestion = z.infer<typeof PredictionQuestionSchema>;
-
-// Simplified schema for the admin form when creating a question
-export const CreatePredictionQuestionFormSchema = z.object({
-  questionText: z.string().min(1, "Question text is required"),
-  googleFormLink: z.preprocess(
-    (val) => (val === "" || val === null ? undefined : val),
-    z.string().url("Invalid URL for Google Form Link").optional()
-  ),
-});
-export type CreatePredictionQuestionFormValues = z.infer<typeof CreatePredictionQuestionFormSchema>;
-
-// Simplified schema used for POST API before adding id and createdAt
-export const CreatePredictionQuestionApiSchema = PredictionQuestionSchema
+// Prediction related schemas and types have been removed.
