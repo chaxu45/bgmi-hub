@@ -135,19 +135,25 @@
         "name": "Manya",
         "ign": "Manya",
         "role": "IGL",
-        "id": "989e2544-13c0-460b-80f1-ed0198c7e0fb"
+        "id": "c8c28b14-0f61-4be2-b276-9a0570d6fa6d"
       },
       {
         "name": "Harsh",
         "ign": "Goblin",
         "role": "Assaulter",
-        "id": "85958718-27d0-4c60-9ba6-dad46f3175f7"
+        "id": "1c9fcbeb-9f2b-4a11-b3de-ae5ed0985bc6"
       },
       {
         "name": "Legit",
         "ign": "Legit",
         "role": "Assaulter",
-        "id": "2a0a33f3-f840-49af-b0ea-92ab08aacade"
+        "id": "bcbe2c84-fefb-45c1-a75f-29900a9e2fcb"
+      },
+      {
+        "name": "Rony",
+        "ign": "Rony",
+        "role": "Support",
+        "id": "5f29ee55-4373-43a3-a8e0-1a0c9ad5c149"
       }
     ],
     "id": "b702db90-000c-4310-be5d-7e0da81ed3f8"

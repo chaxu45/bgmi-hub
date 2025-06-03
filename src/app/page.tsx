@@ -4,8 +4,10 @@ import { NewsList } from '@/components/news/news-list';
 import { TournamentList } from '@/components/tournaments/tournament-list';
 import { PageHeader } from '@/components/shared/page-header';
 import Link from 'next/link';
-import { ArrowRight, Users as UsersIcon, ListOrdered as ListOrderedIcon } from 'lucide-react'; // Renamed to avoid conflict
+import { ArrowRight, Users as UsersIcon, ListOrdered as ListOrderedIcon } from 'lucide-react';
 import type { NewsArticle, Tournament } from '@/types';
+import { AdsenseAdUnit } from '@/components/ads/adsense-ad-unit'; // Import the ad unit
+import { Separator } from '@/components/ui/separator';
 
 export const dynamic = 'force-dynamic'; // Ensures the page is always dynamically rendered
 
@@ -68,6 +70,16 @@ export default async function HomePage() {
         <TournamentList tournaments={featuredTournaments} />
       </section>
 
+      {/* Example AdSense Ad Unit */}
+      <section className="my-8">
+         <Separator className="my-6" />
+        <h3 className="text-xl font-semibold font-headline mb-4 text-center">Advertisement</h3>
+        {/* Replace YOUR_AD_SLOT_ID_HOMEPAGE with an actual Ad Slot ID from your AdSense account */}
+        <AdsenseAdUnit adSlotId="YOUR_AD_SLOT_ID_HOMEPAGE" className="mx-auto max-w-full w-[728px] h-[90px] md:w-[970px] md:h-[250px] bg-muted/20 flex items-center justify-center text-muted-foreground rounded-md shadow" />
+         <Separator className="my-6" />
+      </section>
+
+
       <section className="text-center py-8">
         <h3 className="text-2xl font-semibold font-headline mb-6">Explore More</h3>
         <div className="flex flex-wrap justify-center gap-4">
@@ -86,4 +98,3 @@ export default async function HomePage() {
     </div>
   );
 }
-
