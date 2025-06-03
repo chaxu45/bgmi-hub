@@ -1,0 +1,61 @@
+
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+
+# Dependencies
+/node_modules
+/.pnp
+.pnp.js
+.yarn/install-state.gz
+
+# Testing
+/coverage
+
+# Next.js build output
+/.next/
+/out/
+
+# Production
+/build
+
+# Other
+.DS_Store
+*.pem
+
+# Environment Variables
+.env
+.env*.local
+.env*.production
+.env*.development
+!.env.example
+!.env.template
+
+# Debug log files
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+*.log
+
+# Editor directories and files
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+*.sublime-workspace
+
+# Firebase
+.firebase
+firebase-debug.log
+database-debug.log
+
+# Genkit (if you store local state or outputs, though this should ideally be handled by genkit's own ignore if it creates them)
+# .genkit/ # Check if Genkit creates a local state directory you want to ignore
+
+# TypeScript cache
+*.tsbuildinfo
+
+# Misc
+.idea
+.fleet
+*.swp
+*~

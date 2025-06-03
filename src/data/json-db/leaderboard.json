@@ -1,0 +1,6 @@
+
+{
+  "tournamentId": "default-leaderboard",
+  "tournamentName": "Current Tournament Leaderboard",
+  "leaderboardImageUrls": ["https://placehold.co/800x1200.png"]
+}
