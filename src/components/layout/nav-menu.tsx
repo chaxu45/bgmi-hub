@@ -3,7 +3,7 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Home, Trophy, Users, ListOrdered, PlusCircle, CalendarPlus, UserPlus, ListChecks, HelpCircle, Edit3, UsersCog, ClipboardEdit } from 'lucide-react';
+import { Home, Trophy, Users, ListOrdered, PlusCircle, CalendarPlus, UserPlus, ListChecks, HelpCircle, Edit3, UserCog, ClipboardEdit } from 'lucide-react'; // Changed UsersCog to UserCog
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 
@@ -19,7 +19,7 @@ const adminNavItems = [
   { href: '/admin/add-news', label: 'Add News', icon: PlusCircle },
   { href: '/admin/add-tournament', label: 'Add Tournament', icon: CalendarPlus },
   { href: '/admin/add-team', label: 'Add Team', icon: UserPlus },
-  { href: '/admin/manage-teams', label: 'Manage Teams', icon: UsersCog },
+  { href: '/admin/manage-teams', label: 'Manage Teams', icon: UserCog }, // Changed UsersCog to UserCog
   { href: '/admin/manage-tournaments', label: 'Manage Tournaments', icon: ClipboardEdit },
   { href: '/admin/update-leaderboard', label: 'Update Leaderboard', icon: ListChecks },
   { href: '/admin/manage-prediction', label: 'Manage Prediction', icon: Edit3 },
