@@ -61,4 +61,13 @@ export const TournamentLeaderboardSchema = z.object({
 });
 export type TournamentLeaderboard = z.infer<typeof TournamentLeaderboardSchema>;
 
-// Prediction related schemas and types have been removed.
+// Schema for the prediction question stored in the JSON file
+export const StoredPredictionQuestionSchema = z.object({
+  questionText: z.string().min(1, "Question text is required."),
+  googleFormUrl: z.string().url("Must be a valid Google Form URL.").min(1, "Google Form URL is required."),
+});
+export type StoredPredictionQuestion = z.infer<typeof StoredPredictionQuestionSchema>;
+
+// Schema for the form on the admin page
+export const ManagePredictionFormSchema = StoredPredictionQuestionSchema;
+export type ManagePredictionFormValues = z.infer<typeof ManagePredictionFormSchema>;
