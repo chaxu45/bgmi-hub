@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BGMI Hub - Admin Login</title>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background-color: #1a2e4c;
+      color: white;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      margin: 0;
+      padding: 20px;
+      text-align: center;
+    }
+    .card {
+      background-color: #2a3f5f;
+      border-radius: 8px;
+      padding: 30px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      max-width: 400px;
+      width: 100%;
+    }
+    h1 {
+      margin-bottom: 10px;
+    }
+    p {
+      margin-bottom: 20px;
+      opacity: 0.8;
+    }
+    .form-group {
+      margin-bottom: 15px;
+      text-align: left;
+    }
+    label {
+      display: block;
+      margin-bottom: 5px;
+      font-size: 14px;
+    }
+    input {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #3a4f6f;
+      border-radius: 4px;
+      background-color: #253649;
+      color: white;
+      box-sizing: border-box;
+    }
+    button {
+      background-color: #4f6df5;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      padding: 12px;
+      width: 100%;
+      cursor: pointer;
+      font-weight: bold;
+      margin-top: 10px;
+    }
+    button:hover {
+      background-color: #3a58e0;
+    }
+    .error {
+      color: #ff6b6b;
+      margin-top: 10px;
+      font-size: 14px;
+    }
+    .logo {
+      font-size: 24px;
+      font-weight: bold;
+      margin-bottom: 20px;
+    }
+  </style>
+</head>
+<body>
+  <div class="logo">BGMI India Hub</div>
+  <div class="card">
+    <h1>Admin Login</h1>
+    <p>Please sign in to access the admin area</p>
+    
+    <form id="loginForm">
+      <div class="form-group">
+        <label for="email">Email</label>
+        <input type="email" id="email" placeholder="admin@example.com" required>
+      </div>
+      <div class="form-group">
+        <label for="password">Password</label>
+        <input type="password" id="password" required>
+      </div>
+      <div id="error" class="error"></div>
+      <button type="submit" id="submitBtn">Sign In</button>
+    </form>
+  </div>
+
+  <script src="https://www.gstatic.com/firebasejs/10.1.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.1.0/firebase-auth-compat.js"></script>
+  <script>
+    // Firebase configuration
+    const firebaseConfig = {
+      apiKey: "AIzaSyDW33ar90-1_DY5pcH90KN_TsvsoM5f0aY",
+      authDomain: "bgmi-hub-be0ef.firebaseapp.com",
+      projectId: "bgmi-hub-be0ef",
+      storageBucket: "bgmi-hub-be0ef.firebasestorage.app",
+      messagingSenderId: "937799779250",
+      appId: "1:937799779250:web:d5737f427a328d9007daab",
+      measurementId: "G-VFT16RQ8V6"
+    };
+
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
+    
+    document.getElementById('loginForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      
+      const email = document.getElementById('email').value;
+      const password = document.getElementById('password').value;
+      const errorElement = document.getElementById('error');
+      const submitBtn = document.getElementById('submitBtn');
+      
+      errorElement.textContent = '';
+      submitBtn.textContent = 'Signing In...';
+      submitBtn.disabled = true;
+      
+      try {
+        const userCredential = await firebase.auth().signInWithEmailAndPassword(email, password);
+        const user = userCredential.user;
+        
+        // Set cookies for authentication
+        document.cookie = `session=authenticated; path=/; max-age=${60*60*24}`; // 1 day
+        document.cookie = `user_email=${user.email}; path=/; max-age=${60*60*24}`;
+        
+        // Redirect to admin page
+        window.location.href = '/admin/add-news';
+      } catch (error) {
+        console.error('Login error:', error);
+        
+        if (error.code === 'auth/invalid-credential' || error.code === 'auth/user-not-found' || error.code === 'auth/wrong-password') {
+          errorElement.textContent = 'Invalid email or password. Please try again.';
+        } else if (error.code === 'auth/too-many-requests') {
+          errorElement.textContent = 'Too many failed login attempts. Please try again later.';
+        } else {
+          errorElement.textContent = `Authentication error: ${error.message || 'Unknown error'}`;
+        }
+        
+        submitBtn.textContent = 'Sign In';
+        submitBtn.disabled = false;
+      }
+    });
+  </script>
+</body>
+</html>
