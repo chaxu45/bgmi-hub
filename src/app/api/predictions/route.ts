@@ -114,10 +114,14 @@
 //   return NextResponse.json({ success: true });
 // }
 import { db } from '@/lib/firebase/config';
+
 import { collection, getDocs, addDoc, updateDoc, deleteDoc, doc, getDoc, serverTimestamp, query, orderBy, limit } from 'firebase/firestore';
 import { NextResponse } from 'next/server';
 import { z } from 'zod';
 
+console.log("Firestore db instance:", db);
+
+const snapshot = await getDocs(collection(db, 'predictions'));
 // Define the prediction schema for validation
 const PredictionSchema = z.object({
   question: z.string().min(5, "Question must be at least 5 characters"),
