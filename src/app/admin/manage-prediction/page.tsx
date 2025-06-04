@@ -1,4 +1,3 @@
-
 'use client';
 
 import * as React from 'react';
@@ -73,16 +72,21 @@ export default function ManagePredictionPage() {
   async function onSubmit(data: ManagePredictionFormValues) {
     setIsSaving(true);
     try {
-      const response = await fetch('/api/predictions', {
-        method: 'POST',
+      const method = currentPrediction ? 'PATCH' : 'POST';
+      const url = '/api/predictions';
+      const body = currentPrediction ? { id: currentPrediction.id, ...data } : data;
+
+      const response = await fetch(url, {
+        method,
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(data),
+        body: JSON.stringify(body),
       });
 
       if (!response.ok) {
         const errorData = await response.json();
-        throw new Error(errorData.message || 'Failed to set prediction question');
+        throw new Error(errorData.message || 'Failed to save prediction question');
       }
+
       const savedPrediction: StoredPredictionQuestion = await response.json();
       setCurrentPrediction(savedPrediction);
       form.reset(savedPrediction);
