@@ -27,7 +27,7 @@ const adminNavItems = [
 ];
 
 export function NavMenu() {
-  const pathname = usePathname();
+  const pathname = usePathname() ?? "";
   const { user, isAdmin, signOut } = useAuth();
 
   let navItems = [...publicNavItems];
