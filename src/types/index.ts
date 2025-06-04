@@ -1,4 +1,3 @@
-
 import { z } from 'zod';
 
 export const NewsArticleSchema = z.object({
@@ -66,7 +65,9 @@ export const StoredPredictionQuestionSchema = z.object({
   questionText: z.string().min(1, "Question text is required."),
   googleFormUrl: z.string().url("Must be a valid Google Form URL.").min(1, "Google Form URL is required."),
 });
-export type StoredPredictionQuestion = z.infer<typeof StoredPredictionQuestionSchema>;
+export type StoredPredictionQuestion = z.infer<typeof StoredPredictionQuestionSchema> & {
+  id?: string;
+};
 
 // Schema for the form on the admin page
 export const ManagePredictionFormSchema = StoredPredictionQuestionSchema;
