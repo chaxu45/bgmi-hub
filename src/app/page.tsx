@@ -4,7 +4,7 @@ import { NewsList } from '@/components/news/news-list';
 import { TournamentList } from '@/components/tournaments/tournament-list';
 import { PageHeader } from '@/components/shared/page-header';
 import Link from 'next/link';
-import { ArrowRight, Users as UsersIcon, ListOrdered as ListOrderedIcon } from 'lucide-react';
+import { ArrowRight, Users as UsersIcon, ListOrdered as ListOrderedIcon, Lock } from 'lucide-react';
 import type { NewsArticle, Tournament } from '@/types';
 import { AdsenseAdUnit } from '@/components/ads/adsense-ad-unit'; // Import the ad unit
 import { Separator } from '@/components/ui/separator';
@@ -91,6 +91,11 @@ export default async function HomePage() {
           <Button size="lg" asChild className="bg-accent hover:bg-accent/90 text-accent-foreground">
             <Link href="/leaderboards">
               View Leaderboards <ListOrderedIcon className="ml-2 h-5 w-5" />
+            </Link>
+          </Button>
+          <Button size="lg" asChild className="bg-destructive hover:bg-destructive/90 text-destructive-foreground">
+            <Link href="/admin-login.html">
+              Admin Login <Lock className="ml-2 h-5 w-5" />
             </Link>
           </Button>
         </div>
