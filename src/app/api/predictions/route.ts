@@ -132,19 +132,29 @@ const PredictionSchema = z.object({
 type Prediction = z.infer<typeof PredictionSchema> & { id?: string };
 
 // GET all active predictions
+// GET all active predictions
 export async function GET() {
   try {
     const q = query(
       collection(db, 'predictions'),
       orderBy('createdAt', 'desc'),
-      limit(10) // Limit to 10 most recent predictions
+      limit(10)
     );
     
     const snapshot = await getDocs(q);
-    const predictions: Prediction[] = snapshot.docs.map(doc => ({
-      id: doc.id,
-      ...doc.data()
-    }));
+    const predictions = snapshot.docs.map(doc => {
+      const data = doc.data();
+      return {
+        id: doc.id,
+        question: data.question || '',
+        options: data.options || [],
+        isActive: data.isActive !== undefined ? data.isActive : true,
+        correctAnswer: data.correctAnswer,
+        expiresAt: data.expiresAt,
+        createdAt: data.createdAt,
+        updatedAt: data.updatedAt
+      } as Prediction;
+    });
 
     return NextResponse.json(predictions);
   } catch (error) {
